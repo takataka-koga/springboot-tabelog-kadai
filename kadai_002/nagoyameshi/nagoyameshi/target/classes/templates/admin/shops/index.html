@@ -1,0 +1,108 @@
+ <!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1">    
+              
+         <!-- Bootstrap -->
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+         
+         <!-- Google Fonts -->
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">   
+         
+         <link th:href="@{/css/style.css}" rel="stylesheet" >
+         
+         <title>店舗一覧</title>       
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm samuraitravel-navbar">
+                 <div class="container nagoyameshi-container">
+                     <a class="navbar-brand" th:href="@{/}">                        
+                         <img class="nagoyameshi-logo me-1" th:src="@{/images/logo.png}" alt="NAGOYAMESHI">                        
+                     </a>                                                                    
+                 </div>
+             </nav>
+             
+             <main>
+                 <div class="container pt-4 pb-5 nagoyameshi-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xxl-9 col-xl-10 col-lg-11">
+                             
+                             <h1 class="mb-4 text-center">店舗一覧</h1>   
+                             
+                             <div class="d-flex justify-content-between align-items-end flex-wrap">
+                                 <form method="get" th:action="@{/admin/shops}" class="mb-3">
+                                     <div class="input-group">
+                                         <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名">
+                                         <button type="submit" class="btn text-white shadow-sm samuraitravel-btn">検索</button> 
+                                     </div>               
+                                 </form>                                
+
+                                 <a href="#" class="btn text-white shadow-sm mb-3 nagiyameshi-btn">登録</a>
+                             </div>                                                          
+                             
+                             <table class="table">
+                                 <thead>
+                                     <tr>
+                                         <th scope="col">ID</th>
+                                         <th scope="col">店舗名</th>
+                                         <th scope="col">郵便番号</th>
+                                         <th scope="col">住所</th>
+                                         <th scope="col">電話番号</th>
+                                         <th scope="col"></th>                                        
+                                     </tr>
+                                 </thead>   
+                                 <tbody>                                                     
+                                     <tr th:each="shop : ${shopPage}">
+                                         <td th:text="${shop.getId()}"></td>
+                                         <td th:text="${shop.getName()}"></td>
+                                         <td th:text="${shop.getPostalCode()}"></td>
+                                         <td th:text="${shop.getAddress()}"></td>
+                                         <td th:text="${shop.getPhoneNumber()}"></td>
+                                         <td><a href="@{/admin/shops/__${shop.getId()}__">詳細</a></td>                                                                                
+                                     </tr>                                      
+                                 </tbody>
+                             </table>  
+                             
+                             <!-- ページネーション -->
+                             <div th:if="${shopPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                 <nav aria-label="店舗一覧ページ">
+                                     <ul class="pagination">
+                                         <li class="page-item">
+                                             <span th:if="${shopPage.isFirst()}" class="page-link disabled">前</span>
+                                             <a th:unless="${shopPage.isFirst()}" th:href="@{/admin/shops(page = ${shopPage.getNumber() - 1}, keyword = ${keyword})}" class="page-link nagoyameshi-page-link">前</a>
+                                         </li>
+                                         <li th:each="i : ${#numbers.sequence(0, shopPage.getTotalPages() - 1)}" class="page-item">
+                                             <span th:if="${i == shopPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
+                                             <a th:unless="${i == shopPage.getNumber()}" th:href="@{/admin/shops(page = ${i}, keyword = ${keyword})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+                                         </li>
+                                         <li class="page-item">                        
+                                             <span th:if="${shopPage.isLast()}" class="page-link disabled">次</span>
+                                             <a th:unless="${shopPage.isLast()}" th:href="@{/admin/shops(page = ${housePage.getNumber() + 1}, keyword = ${keyword})}" class="page-link nagoyameshi-page-link">次</a>
+                                         </li>
+                                     </ul>
+                                 </nav> 
+                             </div>                                                                   
+
+                                                                  
+                         </div>
+                     </div>
+                 </div>              
+             </main>
+             
+             <!-- フッター -->
+             <footer>
+                 <div class="d-flex justify-content-center align-items-center h-100">
+                 <p class="text-center text-muted small mb-0">&copy; NAGOYAMESHI All rights reserved.</p>      
+                 </div>                 
+             </footer>
+         </div>    
+         
+         <!-- Bootstrap -->
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>        
+     </body>
+ </html>
