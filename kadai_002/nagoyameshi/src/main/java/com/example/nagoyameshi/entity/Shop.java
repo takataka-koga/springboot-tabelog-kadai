@@ -35,10 +35,10 @@ public class Shop {
     private Integer price_max;
 
     @Column(name = "open_time")
-    private Integer open_time;
+    private String open_time;
     
     @Column(name = "close_time")
-    private Integer close_time;
+    private String close_time;
 
     @Column(name = "postal_code")
     private String postalCode;
